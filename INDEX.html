@@ -1,0 +1,1040 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0d1b2a;--bg2:#1a2e45;--bg3:#1e3a56;--bg4:#243f5e;
+--accent:#1e6fba;--accent2:#2589e0;--accent3:#3aa0ff;
+--text:#e8f0fe;--text2:#9ab3d0;--text3:#6a8aaa;
+--success:#1d9e75;--warn:#ba7517;--danger:#a32d2d;
+--border:#1e3a56;--card:#16273d;
+--radius:12px;--radius-sm:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+.phone{max-width:380px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative;overflow:hidden}
+.screen{display:none;flex-direction:column;min-height:100vh;animation:fadeIn .2s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.topbar{background:var(--bg2);padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:500;flex:1}
+.topbar .back{background:none;border:none;color:var(--accent3);font-size:22px;cursor:pointer;padding:0;line-height:1}
+.content{flex:1;overflow-y:auto;padding:16px}
+.navbar{background:var(--bg2);border-top:1px solid var(--border);display:flex;padding:8px 0 4px;position:sticky;bottom:0}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--text3);font-size:10px;cursor:pointer;padding:4px 0;transition:color .2s}
+.nav-btn.active,.nav-btn:hover{color:var(--accent3)}
+.nav-btn i{font-size:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+.card-title{font-size:13px;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.btn{width:100%;padding:12px;border-radius:var(--radius-sm);border:none;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn:active{transform:scale(0.98)}
+.input-group{margin-bottom:12px}
+.input-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
+.input-group input,.input-group select,.input-group textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s}
+.input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:var(--accent)}
+.input-group textarea{resize:none;height:70px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-success{background:#04342c;color:#5dcaa5}
+.badge-warn{background:#412402;color:#fac775}
+.badge-danger{background:#501313;color:#f09595}
+.badge-info{background:#042c53;color:#85b7eb}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-card{background:var(--bg3);border-radius:var(--radius-sm);padding:12px;text-align:center}
+.stat-num{font-size:22px;font-weight:500;color:var(--accent3)}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.list-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.list-item:last-child{border-bottom:none}
+.list-item-icon{width:38px;height:38px;border-radius:var(--radius-sm);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--accent3);flex-shrink:0}
+.list-item-info{flex:1;min-width:0}
+.list-item-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-item-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.list-item-action{color:var(--text3);font-size:18px;flex-shrink:0}
+.section-title{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:4px 0 8px}
+.progress-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .4s}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.photo-thumb{aspect-ratio:1;background:var(--bg3);border-radius:var(--radius-sm);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--text3);transition:all .2s}
+.photo-thumb.filled{border-style:solid;border-color:var(--accent);background:var(--bg4)}
+.photo-thumb:hover{border-color:var(--accent3)}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .2s;margin:3px}
+.tag.selected{background:var(--accent);border-color:var(--accent);color:#fff}
+.gps-box{background:var(--bg3);border-radius:var(--radius-sm);padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.gps-dot{width:10px;height:10px;border-radius:50%;background:var(--success);flex-shrink:0;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.toast{position:absolute;bottom:80px;left:16px;right:16px;background:#1d9e75;color:#fff;padding:12px 16px;border-radius:var(--radius-sm);font-size:13px;display:none;align-items:center;gap:8px;z-index:100;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast.show{display:flex}
+.toast-warn{background:var(--warn)}
+.mic-btn{width:60px;height:60px;border-radius:50%;background:var(--bg3);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:26px;color:var(--text2);transition:all .2s;margin:0 auto 12px}
+.mic-btn.recording{background:#501313;border-color:var(--danger);color:#f09595;animation:micPulse 1s infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(163,45,45,.4)}50%{box-shadow:0 0 0 10px rgba(163,45,45,0)}}
+.signature-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);height:100px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px;cursor:pointer;margin-bottom:12px;transition:border-color .2s}
+.signature-box.signed{border-color:var(--success);color:var(--success)}
+.tab-bar{display:flex;gap:4px;margin-bottom:14px}
+.tab{flex:1;padding:8px;text-align:center;font-size:12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);background:var(--bg3);transition:all .2s}
+.tab.active{background:var(--accent);color:#fff}
+.qr-box{width:120px;height:120px;background:#fff;border-radius:var(--radius-sm);margin:12px auto;display:flex;align-items:center;justify-content:center;padding:8px}
+.qr-inner{width:100%;height:100%;background:linear-gradient(45deg,#000 25%,transparent 25%,transparent 75%,#000 75%),linear-gradient(45deg,#000 25%,transparent 25%,transparent 75%,#000 75%);background-size:12px 12px;background-position:0 0,6px 6px;opacity:.9;border-radius:4px}
+.timeline{padding-left:24px;position:relative}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{position:relative;padding-bottom:16px}
+.timeline-dot{position:absolute;left:-21px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.timeline-dot.done{background:var(--success)}
+.timeline-dot.warn{background:var(--warn)}
+.timeline-time{font-size:11px;color:var(--text3)}
+.timeline-text{font-size:13px;margin-top:1px}
+.map-placeholder{background:var(--bg3);border-radius:var(--radius-sm);height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text3);font-size:13px;border:1px solid var(--border);margin-bottom:12px;position:relative;overflow:hidden}
+.map-placeholder::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 20px,rgba(30,111,186,.06) 20px,rgba(30,111,186,.06) 21px),repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(30,111,186,.06) 20px,rgba(30,111,186,.06) 21px)}
+.map-pin{font-size:28px;position:relative;z-index:1}
+.alert-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:var(--radius-sm);margin-bottom:8px;border-left:3px solid var(--warn)}
+.alert-row.danger{border-left-color:var(--danger)}
+.alert-row.success{border-left-color:var(--success)}
+.splash-logo{text-align:center;padding:60px 20px 30px}
+.splash-logo i{font-size:56px;color:var(--accent3)}
+.splash-logo h1{font-size:24px;font-weight:600;margin:12px 0 4px;color:var(--text)}
+.splash-logo p{color:var(--text2);font-size:13px}
+.role-btn{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;cursor:pointer;transition:all .2s;text-align:left;width:100%;margin-bottom:8px;display:flex;align-items:center;gap:12px;color:var(--text)}
+.role-btn:hover{border-color:var(--accent);background:var(--bg4)}
+.role-btn i{font-size:24px;color:var(--accent3)}
+.role-info h3{font-size:14px;font-weight:500;margin-bottom:2px}
+.role-info p{font-size:11px;color:var(--text3)}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;font-size:12px;background:var(--bg4);color:var(--text2);margin:3px;border:1px solid var(--border)}
+.form-step{display:none}
+.form-step.active{display:block}
+.step-indicator{display:flex;gap:6px;margin-bottom:16px;justify-content:center}
+.step-dot{width:24px;height:6px;border-radius:3px;background:var(--bg3)}
+.step-dot.done{background:var(--success)}
+.step-dot.active{background:var(--accent)}
+</style>
+
+<div class="phone" id="app">
+
+<div class="screen active" id="screen-login">
+  <div class="splash-logo">
+    <i class="ti ti-flask" aria-hidden="true"></i>
+    <h1>FoodTrace</h1>
+    <p>Plataforma de muestreos alimentarios</p>
+  </div>
+  <div class="content" style="padding-top:0">
+    <div class="input-group">
+      <label>Correo electrónico</label>
+      <input type="email" id="login-email" value="tecnico@empresa.com" placeholder="usuario@empresa.com">
+    </div>
+    <div class="input-group">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" value="••••••••" placeholder="Contraseña">
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()" style="margin-bottom:12px">
+      <i class="ti ti-login" aria-hidden="true"></i> Ingresar
+    </button>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-bottom:16px">— Demo: selecciona tu rol —</p>
+    <button class="role-btn" onclick="loginAs('tecnico')">
+      <i class="ti ti-user-check" aria-hidden="true"></i>
+      <div class="role-info"><h3>Técnico de campo</h3><p>Captura muestras y sube evidencia</p></div>
+    </button>
+    <button class="role-btn" onclick="loginAs('admin')">
+      <i class="ti ti-shield-check" aria-hidden="true"></i>
+      <div class="role-info"><h3>Administrador</h3><p>Gestión completa del sistema</p></div>
+    </button>
+    <button class="role-btn" onclick="loginAs('cliente')">
+      <i class="ti ti-building" aria-hidden="true"></i>
+      <div class="role-info"><h3>Cliente</h3><p>Consulta reportes y descargas</p></div>
+    </button>
+  </div>
+</div>
+
+<div class="screen" id="screen-home-tecnico">
+  <div class="topbar">
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500">CA</div>
+    <div class="topbar-title" style="margin-left:4px">Hola, Carlos</div>
+    <button class="back" onclick="showScreen('screen-notif')" title="Notificaciones"><i class="ti ti-bell" aria-hidden="true"></i></button>
+    <button class="back" onclick="loginAs('')" title="Salir"><i class="ti ti-logout" style="font-size:18px" aria-hidden="true"></i></button>
+  </div>
+  <div class="content">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">8</div><div class="stat-lbl">Muestras hoy</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#5dcaa5">3</div><div class="stat-lbl">Pendientes</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#fac775">1</div><div class="stat-lbl">Con incidencia</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--text2)">92%</div><div class="stat-lbl">Cumplimiento</div></div>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('screen-nueva-muestra')" style="margin-bottom:12px">
+      <i class="ti ti-plus" aria-hidden="true"></i> Nueva muestra
+    </button>
+    <p class="section-title">Muestras recientes</p>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-meat" aria-hidden="true"></i></div>
+        <div class="list-item-info">
+          <div class="list-item-title">Pollo filete — Restaurante El Patio</div>
+          <div class="list-item-sub">Hoy 09:32 · <span style="color:#5dcaa5">Conforme</span></div>
+        </div>
+        <i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-fish" aria-hidden="true"></i></div>
+        <div class="list-item-info">
+          <div class="list-item-title">Salmón — Cafetería Central</div>
+          <div class="list-item-sub">Hoy 10:15 · <span style="color:#fac775">Incidencia</span></div>
+        </div>
+        <i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-salad" aria-hidden="true"></i></div>
+        <div class="list-item-info">
+          <div class="list-item-title">Ensalada — Hotel Continental</div>
+          <div class="list-item-sub">Ayer 16:40 · <span style="color:#5dcaa5">Conforme</span></div>
+        </div>
+        <i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i>
+      </div>
+    </div>
+    <p class="section-title">Agenda de hoy</p>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item">
+        <div class="list-item-icon" style="background:#04342c;color:#5dcaa5"><i class="ti ti-check" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Restaurante El Patio</div><div class="list-item-sub">08:00 — Completado</div></div>
+      </div>
+      <div class="list-item">
+        <div class="list-item-icon" style="background:#042c53;color:#85b7eb"><i class="ti ti-clock" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Supermercado Frescos</div><div class="list-item-sub">14:00 — Pendiente</div></div>
+      </div>
+      <div class="list-item">
+        <div class="list-item-icon" style="background:#042c53;color:#85b7eb"><i class="ti ti-clock" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Planta Lácteos Sur</div><div class="list-item-sub">16:30 — Pendiente</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="nav-btn active" onclick=""><i class="ti ti-home" aria-hidden="true"></i>Inicio</button>
+    <button class="nav-btn" onclick="showScreen('screen-nueva-muestra')"><i class="ti ti-plus" aria-hidden="true"></i>Capturar</button>
+    <button class="nav-btn" onclick="showScreen('screen-historial')"><i class="ti ti-history" aria-hidden="true"></i>Historial</button>
+    <button class="nav-btn" onclick="showScreen('screen-perfil')"><i class="ti ti-user" aria-hidden="true"></i>Perfil</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-nueva-muestra">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Nueva muestra</div>
+    <span id="step-label" style="font-size:12px;color:var(--text3)">Paso 1/4</span>
+  </div>
+  <div class="content">
+    <div class="step-indicator">
+      <div class="step-dot active" id="sd1"></div>
+      <div class="step-dot" id="sd2"></div>
+      <div class="step-dot" id="sd3"></div>
+      <div class="step-dot" id="sd4"></div>
+    </div>
+
+    <div class="form-step active" id="step1">
+      <p class="section-title">Información general</p>
+      <div class="input-group">
+        <label>ID de muestra (auto)</label>
+        <input type="text" value="MUE-2025-00247" readonly style="color:var(--text3)">
+      </div>
+      <div class="input-group">
+        <label>Cliente *</label>
+        <select>
+          <option>Restaurante El Patio</option>
+          <option>Cafetería Central</option>
+          <option>Hotel Continental</option>
+          <option>Supermercado Frescos</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Sede *</label>
+        <select>
+          <option>Sede Norte</option>
+          <option>Sede Centro</option>
+          <option>Sede Sur</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Fecha y hora</label>
+        <input type="datetime-local" value="2025-06-10T14:30">
+      </div>
+      <button class="btn btn-primary" onclick="nextStep(2)">
+        Continuar <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="form-step" id="step2">
+      <p class="section-title">Datos del producto</p>
+      <div class="input-group">
+        <label>Tipo de alimento *</label>
+        <select id="tipo-alimento">
+          <option>Carne y derivados</option>
+          <option>Lácteos</option>
+          <option>Frutas y verduras</option>
+          <option>Pescados y mariscos</option>
+          <option>Alimentos procesados</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Nombre del producto *</label>
+        <input type="text" placeholder="Ej: Pollo entero refrigerado">
+      </div>
+      <div class="input-group">
+        <label>Número de lote</label>
+        <input type="text" placeholder="Ej: LOT-20250608-A">
+      </div>
+      <div class="input-group">
+        <label>Temperatura de almacenamiento (°C) *</label>
+        <input type="number" id="temp-input" placeholder="Ej: 4" step="0.1" oninput="checkTemp(this.value)">
+      </div>
+      <div id="temp-alert" style="display:none;padding:8px 10px;border-radius:var(--radius-sm);margin-bottom:10px;font-size:12px;background:#501313;color:#f09595;border-left:3px solid var(--danger)">
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i> Temperatura fuera de rango para este tipo de alimento
+      </div>
+      <div class="input-group">
+        <label>Estado visual</label>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">
+          <span class="tag selected" onclick="toggleTag(this)">Óptimo</span>
+          <span class="tag" onclick="toggleTag(this)">Aceptable</span>
+          <span class="tag" onclick="toggleTag(this)">No conforme</span>
+          <span class="tag" onclick="toggleTag(this)">Deteriorado</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" style="flex:1" onclick="nextStep(1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Atrás</button>
+        <button class="btn btn-primary" style="flex:2" onclick="nextStep(3)">Continuar <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div class="form-step" id="step3">
+      <p class="section-title">Evidencia y ubicación</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:10px">Fotografías (máx. 6)</p>
+      <div class="photo-grid" id="photo-grid">
+        <div class="photo-thumb" onclick="addPhoto(this)"><i class="ti ti-camera" aria-hidden="true"></i></div>
+        <div class="photo-thumb" onclick="addPhoto(this)"><i class="ti ti-camera" aria-hidden="true"></i></div>
+        <div class="photo-thumb" onclick="addPhoto(this)"><i class="ti ti-camera" aria-hidden="true"></i></div>
+        <div class="photo-thumb" onclick="addPhoto(this)"><i class="ti ti-camera" aria-hidden="true"></i></div>
+        <div class="photo-thumb" onclick="addPhoto(this)"><i class="ti ti-camera" aria-hidden="true"></i></div>
+        <div class="photo-thumb" onclick="addPhoto(this)"><i class="ti ti-camera" aria-hidden="true"></i></div>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Geolocalización GPS</p>
+      <div class="gps-box" id="gps-box">
+        <div class="gps-dot"></div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500" id="gps-coords">4.6097° N, 74.0817° W</div>
+          <div style="font-size:11px;color:var(--text3)" id="gps-prec">Precisión: 8 m · Bogotá, Colombia</div>
+        </div>
+        <button onclick="refreshGPS()" style="background:none;border:none;color:var(--accent3);font-size:18px;cursor:pointer;padding:0" title="Actualizar GPS"><i class="ti ti-refresh" aria-hidden="true"></i></button>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Observaciones (voz o texto)</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Dictado por voz"><i class="ti ti-microphone" aria-hidden="true"></i></div>
+        <div>
+          <div style="font-size:13px;font-weight:500" id="mic-status">Toca para dictar</div>
+          <div style="font-size:11px;color:var(--text3)">Web Speech API</div>
+        </div>
+      </div>
+      <div class="input-group" style="margin-bottom:12px">
+        <textarea id="obs-text" placeholder="Escribe u observaciones aquí...">Producto almacenado en cámara frigorífica, temperatura correcta. Empaque sin daños visibles.</textarea>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Firma del responsable</p>
+      <div class="signature-box" id="sig-box" onclick="toggleSign()">
+        <span id="sig-text"><i class="ti ti-pencil" aria-hidden="true"></i> Toca para firmar</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" style="flex:1" onclick="nextStep(2)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Atrás</button>
+        <button class="btn btn-primary" style="flex:2" onclick="nextStep(4)">Continuar <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div class="form-step" id="step4">
+      <p class="section-title">Revisión y envío</p>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">ID muestra</span>
+          <span style="font-size:13px;font-weight:500">MUE-2025-00247</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">Cliente</span>
+          <span style="font-size:13px">Restaurante El Patio</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">Producto</span>
+          <span style="font-size:13px">Pollo entero refrigerado</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">Temperatura</span>
+          <span style="font-size:13px;color:#5dcaa5">4.2°C ✓</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">Estado visual</span>
+          <span class="badge badge-success">Óptimo</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">Fotos</span>
+          <span style="font-size:13px" id="photo-count-review">2 adjuntas</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)">GPS</span>
+          <span style="font-size:13px;color:#5dcaa5">Capturado</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:12px;color:var(--text3)">Firma</span>
+          <span style="font-size:13px" id="sign-status-review">Pendiente</span>
+        </div>
+      </div>
+      <div style="background:#04342c;border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;display:flex;gap:8px;align-items:center">
+        <i class="ti ti-mail" style="color:#5dcaa5;font-size:16px" aria-hidden="true"></i>
+        <span style="font-size:12px;color:#9fe1cb">Se enviará reporte automático al cliente y al supervisor</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" style="flex:1" onclick="nextStep(3)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Atrás</button>
+        <button class="btn btn-success" style="flex:2" onclick="submitMuestra()"><i class="ti ti-check" aria-hidden="true"></i> Enviar muestra</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-detalle-muestra">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Muestra MUE-2025-00241</div>
+    <button class="back" onclick="showScreen('screen-qr')"><i class="ti ti-qrcode" aria-hidden="true"></i></button>
+  </div>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <span class="badge badge-success" style="padding:6px 12px;font-size:13px"><i class="ti ti-circle-check" aria-hidden="true"></i> Conforme</span>
+      <span style="font-size:12px;color:var(--text3)">10 jun 2025 · 09:32</span>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab(this,'tab-info')">Datos</div>
+      <div class="tab" onclick="switchTab(this,'tab-fotos')">Fotos</div>
+      <div class="tab" onclick="switchTab(this,'tab-audit')">Auditoría</div>
+    </div>
+    <div id="tab-info">
+      <div class="card">
+        <p class="card-title"><i class="ti ti-building" aria-hidden="true"></i> Cliente</p>
+        <div style="font-size:14px;font-weight:500">Restaurante El Patio</div>
+        <div style="font-size:12px;color:var(--text3)">Sede Norte · Bogotá</div>
+      </div>
+      <div class="card">
+        <p class="card-title"><i class="ti ti-meat" aria-hidden="true"></i> Producto</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><div style="font-size:11px;color:var(--text3)">Tipo</div><div style="font-size:13px">Carne y derivados</div></div>
+          <div><div style="font-size:11px;color:var(--text3)">Producto</div><div style="font-size:13px">Pollo filete</div></div>
+          <div><div style="font-size:11px;color:var(--text3)">Lote</div><div style="font-size:13px">LOT-20250608-A</div></div>
+          <div><div style="font-size:11px;color:var(--text3)">Temperatura</div><div style="font-size:13px;color:#5dcaa5">4.2°C ✓</div></div>
+          <div><div style="font-size:11px;color:var(--text3)">Estado</div><div style="font-size:13px">Óptimo</div></div>
+          <div><div style="font-size:11px;color:var(--text3)">Técnico</div><div style="font-size:13px">Carlos A.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title"><i class="ti ti-map-pin" aria-hidden="true"></i> Geolocalización</p>
+        <div class="map-placeholder">
+          <div class="map-pin">📍</div>
+          <span>4.6097° N, 74.0817° W · Precisión 8m</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title"><i class="ti ti-notes" aria-hidden="true"></i> Observaciones</p>
+        <p style="font-size:13px;line-height:1.6">Producto almacenado en cámara frigorífica. Temperatura correcta. Empaque sin daños visibles. Se verificó fecha de vencimiento.</p>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-secondary" style="flex:1" onclick="showScreen('screen-pdf-preview')"><i class="ti ti-file-text" aria-hidden="true"></i> Ver PDF</button>
+        <button class="btn btn-primary" style="flex:1" onclick="showToast('Reporte enviado al cliente','success')"><i class="ti ti-send" aria-hidden="true"></i> Enviar</button>
+      </div>
+    </div>
+    <div id="tab-fotos" style="display:none">
+      <div class="photo-grid">
+        <div class="photo-thumb filled" style="font-size:30px;cursor:default">🍗</div>
+        <div class="photo-thumb filled" style="font-size:30px;cursor:default">🌡️</div>
+        <div class="photo-thumb filled" style="font-size:30px;cursor:default">📦</div>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-top:4px">3 fotos · Almacenadas en Google Drive</p>
+      <div class="card" style="margin-top:12px">
+        <p class="card-title">Metadatos</p>
+        <div style="font-size:12px;color:var(--text2);line-height:2">
+          <div>Cámara: Móvil · JPEG comprimido</div>
+          <div>Resolución: 800×600 px</div>
+          <div>Drive: /Muestras/2025/El-Patio/MUE-00241/</div>
+        </div>
+      </div>
+    </div>
+    <div id="tab-audit" style="display:none">
+      <div class="card">
+        <p class="card-title"><i class="ti ti-shield" aria-hidden="true"></i> Registro de auditoría</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-time">10 jun · 09:32</div>
+            <div class="timeline-text">Muestra creada por <strong>Carlos A.</strong></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-time">10 jun · 09:35</div>
+            <div class="timeline-text">3 fotos adjuntas · Drive</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-time">10 jun · 09:36</div>
+            <div class="timeline-text">GPS confirmado · 8m precisión</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-time">10 jun · 09:37</div>
+            <div class="timeline-text">Reporte PDF generado y enviado</div>
+          </div>
+          <div class="timeline-item" style="padding-bottom:0">
+            <div class="timeline-dot"></div>
+            <div class="timeline-time">10 jun · 09:38</div>
+            <div class="timeline-text">Cliente notificado por correo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-home-admin">
+  <div class="topbar">
+    <div style="width:32px;height:32px;border-radius:50%;background:#533ab7;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500">MA</div>
+    <div class="topbar-title" style="margin-left:4px">Dashboard Admin</div>
+    <button class="back" onclick="loginAs('')" title="Salir"><i class="ti ti-logout" style="font-size:18px" aria-hidden="true"></i></button>
+  </div>
+  <div class="content">
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab(this,'admin-overview')">General</div>
+      <div class="tab" onclick="switchTab(this,'admin-clientes')">Clientes</div>
+      <div class="tab" onclick="switchTab(this,'admin-tecnicos')">Técnicos</div>
+    </div>
+    <div id="admin-overview">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num">247</div><div class="stat-lbl">Muestras mes</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#5dcaa5">95%</div><div class="stat-lbl">Conformidad</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#fac775">12</div><div class="stat-lbl">Incidencias</div></div>
+        <div class="stat-card"><div class="stat-num">6</div><div class="stat-lbl">Técnicos activos</div></div>
+      </div>
+      <p class="section-title">Alertas activas</p>
+      <div class="alert-row danger">
+        <i class="ti ti-thermometer" style="color:#f09595;font-size:18px" aria-hidden="true"></i>
+        <div><div style="font-size:13px;font-weight:500">Temperatura crítica</div><div style="font-size:11px;color:var(--text3)">Salmón — Cafetería Central · Hoy 10:15</div></div>
+      </div>
+      <div class="alert-row">
+        <i class="ti ti-clock" style="color:#fac775;font-size:18px" aria-hidden="true"></i>
+        <div><div style="font-size:13px;font-weight:500">Muestra pendiente 2h</div><div style="font-size:11px;color:var(--text3)">Planta Lácteos Sur · Técnico: Pedro G.</div></div>
+      </div>
+      <div class="alert-row success">
+        <i class="ti ti-check" style="color:#5dcaa5;font-size:18px" aria-hidden="true"></i>
+        <div><div style="font-size:13px;font-weight:500">Objetivo semanal alcanzado</div><div style="font-size:11px;color:var(--text3)">50/50 muestras programadas</div></div>
+      </div>
+      <p class="section-title">Productividad — junio</p>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:8px"><span>Meta mensual</span><span>247 / 300</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:4px;margin-top:8px"><span>Carlos Arango</span><span>92%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:92%;background:var(--success)"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:4px"><span>Pedro García</span><span>78%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%;background:#ba7517"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:4px"><span>Ana Martínez</span><span>95%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:95%;background:var(--success)"></div></div>
+      </div>
+    </div>
+    <div id="admin-clientes" style="display:none">
+      <button class="btn btn-primary" onclick="showScreen('screen-nuevo-cliente')" style="margin-bottom:12px"><i class="ti ti-plus" aria-hidden="true"></i> Nuevo cliente</button>
+      <div class="card" style="padding:0 14px">
+        <div class="list-item" onclick="showToast('Abriendo perfil de cliente...')">
+          <div class="list-item-icon" style="background:#04342c;color:#5dcaa5;font-size:13px;font-weight:600">EP</div>
+          <div class="list-item-info">
+            <div class="list-item-title">Restaurante El Patio</div>
+            <div class="list-item-sub">2 sedes · 48 muestras este mes</div>
+          </div>
+          <span class="badge badge-success">Activo</span>
+        </div>
+        <div class="list-item" onclick="showToast('Abriendo perfil de cliente...')">
+          <div class="list-item-icon" style="background:#042c53;color:#85b7eb;font-size:13px;font-weight:600">CC</div>
+          <div class="list-item-info">
+            <div class="list-item-title">Cafetería Central</div>
+            <div class="list-item-sub">1 sede · 31 muestras este mes</div>
+          </div>
+          <span class="badge badge-warn">Incidencia</span>
+        </div>
+        <div class="list-item" onclick="showToast('Abriendo perfil de cliente...')">
+          <div class="list-item-icon" style="background:#26215c;color:#afa9ec;font-size:13px;font-weight:600">HC</div>
+          <div class="list-item-info">
+            <div class="list-item-title">Hotel Continental</div>
+            <div class="list-item-sub">3 sedes · 62 muestras este mes</div>
+          </div>
+          <span class="badge badge-success">Activo</span>
+        </div>
+        <div class="list-item" onclick="showToast('Abriendo perfil de cliente...')">
+          <div class="list-item-icon" style="background:#412402;color:#fac775;font-size:13px;font-weight:600">SF</div>
+          <div class="list-item-info">
+            <div class="list-item-title">Supermercado Frescos</div>
+            <div class="list-item-sub">5 sedes · 106 muestras este mes</div>
+          </div>
+          <span class="badge badge-success">Activo</span>
+        </div>
+      </div>
+    </div>
+    <div id="admin-tecnicos" style="display:none">
+      <div class="card" style="padding:0 14px">
+        <div class="list-item">
+          <div class="list-item-icon" style="background:#04342c;color:#5dcaa5;font-size:13px;font-weight:600">CA</div>
+          <div class="list-item-info"><div class="list-item-title">Carlos Arango</div><div class="list-item-sub">8 muestras hoy · 92% cumplimiento</div></div>
+          <span class="badge badge-success">Activo</span>
+        </div>
+        <div class="list-item">
+          <div class="list-item-icon" style="background:#412402;color:#fac775;font-size:13px;font-weight:600">PG</div>
+          <div class="list-item-info"><div class="list-item-title">Pedro García</div><div class="list-item-sub">5 muestras hoy · 78% cumplimiento</div></div>
+          <span class="badge badge-warn">En campo</span>
+        </div>
+        <div class="list-item">
+          <div class="list-item-icon" style="background:#04342c;color:#5dcaa5;font-size:13px;font-weight:600">AM</div>
+          <div class="list-item-info"><div class="list-item-title">Ana Martínez</div><div class="list-item-sub">7 muestras hoy · 95% cumplimiento</div></div>
+          <span class="badge badge-success">Activo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="nav-btn active"><i class="ti ti-chart-bar" aria-hidden="true"></i>Dashboard</button>
+    <button class="nav-btn" onclick="showScreen('screen-historial')"><i class="ti ti-history" aria-hidden="true"></i>Historial</button>
+    <button class="nav-btn" onclick="showToast('Módulo de reportes')"><i class="ti ti-file-export" aria-hidden="true"></i>Exportar</button>
+    <button class="nav-btn" onclick="showScreen('screen-perfil')"><i class="ti ti-settings" aria-hidden="true"></i>Config</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-home-cliente">
+  <div class="topbar">
+    <div style="width:32px;height:32px;border-radius:50%;background:#412402;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fac775">EP</div>
+    <div class="topbar-title" style="margin-left:4px">El Patio · Portal</div>
+    <button class="back" onclick="loginAs('')" title="Salir"><i class="ti ti-logout" style="font-size:18px" aria-hidden="true"></i></button>
+  </div>
+  <div class="content">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">48</div><div class="stat-lbl">Muestras mes</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#5dcaa5">97%</div><div class="stat-lbl">Conformidad</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#fac775">1</div><div class="stat-lbl">Incidencia</div></div>
+      <div class="stat-card"><div class="stat-num">2</div><div class="stat-lbl">Sedes</div></div>
+    </div>
+    <p class="section-title">Últimos reportes</p>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item" onclick="showScreen('screen-pdf-preview')">
+        <div class="list-item-icon" style="color:#f09595;background:#501313"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+        <div class="list-item-info">
+          <div class="list-item-title">Reporte semana 23 · 2025</div>
+          <div class="list-item-sub">10 jun 2025 · 12 muestras</div>
+        </div>
+        <button onclick="showToast('Descargando PDF...')" style="background:none;border:none;color:var(--accent3);font-size:18px;cursor:pointer"><i class="ti ti-download" aria-hidden="true"></i></button>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-pdf-preview')">
+        <div class="list-item-icon" style="color:#f09595;background:#501313"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+        <div class="list-item-info">
+          <div class="list-item-title">Reporte semana 22 · 2025</div>
+          <div class="list-item-sub">3 jun 2025 · 11 muestras</div>
+        </div>
+        <button onclick="showToast('Descargando PDF...')" style="background:none;border:none;color:var(--accent3);font-size:18px;cursor:pointer"><i class="ti ti-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <p class="section-title">Mis muestras recientes</p>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-meat" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Pollo filete — Sede Norte</div><div class="list-item-sub">Hoy · <span style="color:#5dcaa5">Conforme</span></div></div>
+        <i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-salad" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Ensalada mixta — Sede Centro</div><div class="list-item-sub">Ayer · <span style="color:#5dcaa5">Conforme</span></div></div>
+        <i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="nav-btn active"><i class="ti ti-home" aria-hidden="true"></i>Inicio</button>
+    <button class="nav-btn" onclick="showScreen('screen-historial')"><i class="ti ti-history" aria-hidden="true"></i>Muestras</button>
+    <button class="nav-btn" onclick="showToast('Módulo de reportes PDF')"><i class="ti ti-file-text" aria-hidden="true"></i>Reportes</button>
+    <button class="nav-btn" onclick="showScreen('screen-perfil')"><i class="ti ti-user" aria-hidden="true"></i>Perfil</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-historial">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Historial de muestras</div>
+    <button class="back" onclick="toggleFiltros()" title="Filtros"><i class="ti ti-filter" aria-hidden="true"></i></button>
+  </div>
+  <div class="content">
+    <div class="input-group" style="margin-bottom:8px">
+      <input type="search" placeholder="Buscar por cliente, producto, ID...">
+    </div>
+    <div id="filtros-panel" style="display:none;margin-bottom:10px">
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">
+        <span class="tag selected" onclick="toggleTag(this)">Todos</span>
+        <span class="tag" onclick="toggleTag(this)">Conforme</span>
+        <span class="tag" onclick="toggleTag(this)">Incidencia</span>
+        <span class="tag" onclick="toggleTag(this)">Pendiente</span>
+      </div>
+      <div class="input-group" style="margin-bottom:6px">
+        <label>Cliente</label>
+        <select><option>Todos los clientes</option><option>Restaurante El Patio</option><option>Cafetería Central</option></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="input-group" style="margin-bottom:0"><label>Desde</label><input type="date" value="2025-06-01"></div>
+        <div class="input-group" style="margin-bottom:0"><label>Hasta</label><input type="date" value="2025-06-10"></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--text3)">47 resultados</span>
+      <button onclick="showToast('Exportando a Excel...')" style="background:none;border:none;color:var(--accent3);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-download" style="font-size:14px" aria-hidden="true"></i> Exportar</button>
+    </div>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-meat" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Pollo filete · MUE-00241</div><div class="list-item-sub">El Patio · 10 jun</div></div>
+        <span class="badge badge-success">OK</span>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-fish" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Salmón · MUE-00242</div><div class="list-item-sub">Cafetería · 10 jun</div></div>
+        <span class="badge badge-danger">NC</span>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-salad" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Ensalada · MUE-00243</div><div class="list-item-sub">Hotel Continental · 9 jun</div></div>
+        <span class="badge badge-success">OK</span>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-bottle" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Lácteo UHT · MUE-00244</div><div class="list-item-sub">Supermercado · 9 jun</div></div>
+        <span class="badge badge-success">OK</span>
+      </div>
+      <div class="list-item" onclick="showScreen('screen-detalle-muestra')">
+        <div class="list-item-icon"><i class="ti ti-bread" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Pan artesanal · MUE-00245</div><div class="list-item-sub">Cafetería · 8 jun</div></div>
+        <span class="badge badge-warn">OBS</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-qr">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Código QR</div>
+  </div>
+  <div class="content" style="text-align:center">
+    <div class="card">
+      <p style="font-size:16px;font-weight:500;margin-bottom:4px">MUE-2025-00241</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:14px">Pollo filete · Restaurante El Patio</p>
+      <div class="qr-box">
+        <div class="qr-inner"></div>
+      </div>
+      <p style="font-size:11px;color:var(--text3);margin-top:8px">Escanea para verificar trazabilidad</p>
+    </div>
+    <div class="card">
+      <p class="card-title"><i class="ti ti-shield-check" aria-hidden="true"></i> Verificación online</p>
+      <p style="font-size:12px;color:var(--text2);line-height:1.7">Al escanear este QR, cualquier persona puede verificar la autenticidad de esta muestra en tiempo real desde el servidor.</p>
+      <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:8px 10px;margin-top:10px;font-size:11px;color:var(--text3);word-break:break-all">
+        foodtrace.app/v/MUE-2025-00241-a7f3c
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="showToast('QR descargado')"><i class="ti ti-download" aria-hidden="true"></i> Descargar QR</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-pdf-preview">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Vista previa PDF</div>
+    <button class="back" onclick="showToast('Descargando PDF...')" title="Descargar"><i class="ti ti-download" aria-hidden="true"></i></button>
+  </div>
+  <div class="content">
+    <div style="background:#fff;border-radius:var(--radius);padding:20px;color:#1a1a1a;font-size:12px;border:1px solid #ddd">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #1e6fba">
+        <div>
+          <div style="font-size:16px;font-weight:600;color:#0d1b2a">FoodTrace</div>
+          <div style="font-size:10px;color:#666">Sistema de Gestión de Muestreos</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:#666">Reporte N°</div>
+          <div style="font-size:14px;font-weight:600;color:#1e6fba">MUE-2025-00241</div>
+        </div>
+      </div>
+      <div style="background:#f0f7ff;border-radius:6px;padding:10px;margin-bottom:12px">
+        <div style="font-weight:600;font-size:11px;color:#0d1b2a;margin-bottom:6px">INFORMACIÓN GENERAL</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px">
+          <div><span style="color:#666">Cliente:</span> Restaurante El Patio</div>
+          <div><span style="color:#666">Sede:</span> Norte</div>
+          <div><span style="color:#666">Fecha:</span> 10/06/2025</div>
+          <div><span style="color:#666">Hora:</span> 09:32</div>
+          <div><span style="color:#666">Técnico:</span> Carlos Arango</div>
+          <div><span style="color:#666">Estado:</span> <span style="color:#0f6e56;font-weight:600">Conforme</span></div>
+        </div>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-weight:600;font-size:11px;color:#0d1b2a;margin-bottom:6px">DATOS DEL PRODUCTO</div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse">
+          <tr style="background:#f5f5f5"><td style="padding:5px 8px;color:#666">Producto</td><td style="padding:5px 8px;font-weight:500">Pollo entero refrigerado</td></tr>
+          <tr><td style="padding:5px 8px;color:#666">Tipo</td><td style="padding:5px 8px">Carne y derivados</td></tr>
+          <tr style="background:#f5f5f5"><td style="padding:5px 8px;color:#666">Lote</td><td style="padding:5px 8px">LOT-20250608-A</td></tr>
+          <tr><td style="padding:5px 8px;color:#666">Temperatura</td><td style="padding:5px 8px;color:#0f6e56;font-weight:600">4.2°C ✓ (Rango: 0-7°C)</td></tr>
+          <tr style="background:#f5f5f5"><td style="padding:5px 8px;color:#666">Estado visual</td><td style="padding:5px 8px">Óptimo</td></tr>
+          <tr><td style="padding:5px 8px;color:#666">GPS</td><td style="padding:5px 8px">4.6097°N 74.0817°W ±8m</td></tr>
+        </table>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-weight:600;font-size:11px;color:#0d1b2a;margin-bottom:4px">OBSERVACIONES</div>
+        <p style="font-size:11px;color:#333;line-height:1.5;border-left:3px solid #1e6fba;padding-left:8px">Producto almacenado en cámara frigorífica, temperatura correcta. Empaque sin daños visibles. Se verificó fecha de vencimiento.</p>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #ddd;padding-top:10px;font-size:10px;color:#999">
+        <span>Generado: 10/06/2025 09:37</span>
+        <span>FoodTrace v1.0 · Documento válido</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn btn-secondary" style="flex:1" onclick="showToast('Reenviando al cliente...')"><i class="ti ti-mail" aria-hidden="true"></i> Enviar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="showToast('Descargando PDF...')"><i class="ti ti-download" aria-hidden="true"></i> Descargar</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-nuevo-cliente">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Nuevo cliente</div>
+  </div>
+  <div class="content">
+    <div class="input-group"><label>Nombre de la empresa *</label><input type="text" placeholder="Ej: Restaurante El Patio"></div>
+    <div class="input-group"><label>NIT / RUT *</label><input type="text" placeholder="Ej: 900.123.456-1"></div>
+    <div class="input-group"><label>Correo principal *</label><input type="email" placeholder="contacto@empresa.com"></div>
+    <div class="input-group"><label>Teléfono</label><input type="tel" placeholder="+57 300 000 0000"></div>
+    <div class="input-group"><label>Ciudad</label><input type="text" placeholder="Bogotá"></div>
+    <div class="input-group"><label>Dirección principal</label><input type="text" placeholder="Calle 1 # 2-3"></div>
+    <p class="section-title">Sedes</p>
+    <div class="card" id="sedes-list">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px">Sede 1 — Principal</span>
+        <span class="badge badge-info">Principal</span>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">Se creará con la misma dirección</div>
+    </div>
+    <button class="btn btn-secondary" onclick="showToast('Agrega nueva sede','warn')" style="margin-bottom:12px">
+      <i class="ti ti-plus" aria-hidden="true"></i> Agregar sede
+    </button>
+    <button class="btn btn-success" onclick="showToast('Cliente creado exitosamente');goBack()">
+      <i class="ti ti-check" aria-hidden="true"></i> Guardar cliente
+    </button>
+  </div>
+</div>
+
+<div class="screen" id="screen-notif">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Notificaciones</div>
+  </div>
+  <div class="content">
+    <div class="card" style="padding:0 14px">
+      <div class="list-item">
+        <div class="list-item-icon" style="background:#501313;color:#f09595"><i class="ti ti-alert-triangle" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Temperatura crítica detectada</div><div class="list-item-sub">Salmón — Cafetería Central · Hace 2h</div></div>
+      </div>
+      <div class="list-item">
+        <div class="list-item-icon" style="background:#04342c;color:#5dcaa5"><i class="ti ti-mail" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Reporte enviado al cliente</div><div class="list-item-sub">El Patio — Semana 23 · Hace 3h</div></div>
+      </div>
+      <div class="list-item">
+        <div class="list-item-icon" style="background:#042c53;color:#85b7eb"><i class="ti ti-calendar" aria-hidden="true"></i></div>
+        <div class="list-item-info"><div class="list-item-title">Nueva visita asignada</div><div class="list-item-sub">Planta Lácteos Sur · Mañana 08:00</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-perfil">
+  <div class="topbar">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <div class="topbar-title">Perfil</div>
+  </div>
+  <div class="content">
+    <div style="text-align:center;padding:20px 0">
+      <div style="width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;margin:0 auto 12px">CA</div>
+      <div style="font-size:17px;font-weight:500">Carlos Arango</div>
+      <div style="font-size:13px;color:var(--text3);margin-top:2px">Técnico de campo · Zona Norte</div>
+      <span class="badge badge-success" style="margin-top:8px">Activo</span>
+    </div>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item"><div class="list-item-icon"><i class="ti ti-mail" aria-hidden="true"></i></div><div class="list-item-info"><div class="list-item-title">carlosarango@empresa.com</div><div class="list-item-sub">Correo</div></div></div>
+      <div class="list-item"><div class="list-item-icon"><i class="ti ti-phone" aria-hidden="true"></i></div><div class="list-item-info"><div class="list-item-title">+57 310 234 5678</div><div class="list-item-sub">Teléfono</div></div></div>
+      <div class="list-item"><div class="list-item-icon"><i class="ti ti-id-badge" aria-hidden="true"></i></div><div class="list-item-info"><div class="list-item-title">ID-TEC-0042</div><div class="list-item-sub">Identificación interna</div></div></div>
+    </div>
+    <p class="section-title">Estadísticas personales</p>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">247</div><div class="stat-lbl">Total muestras</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#5dcaa5">92%</div><div class="stat-lbl">Cumplimiento</div></div>
+    </div>
+    <p class="section-title">Configuración</p>
+    <div class="card" style="padding:0 14px">
+      <div class="list-item" onclick="showToast('Configuración de notificaciones')"><div class="list-item-icon"><i class="ti ti-bell" aria-hidden="true"></i></div><div class="list-item-info"><div class="list-item-title">Notificaciones</div></div><i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i></div>
+      <div class="list-item" onclick="showToast('Configuración offline')"><div class="list-item-icon"><i class="ti ti-wifi-off" aria-hidden="true"></i></div><div class="list-item-info"><div class="list-item-title">Modo sin conexión</div><div class="list-item-sub">3 muestras en cola</div></div><i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i></div>
+      <div class="list-item" onclick="showToast('Cambiar contraseña')"><div class="list-item-icon"><i class="ti ti-lock" aria-hidden="true"></i></div><div class="list-item-info"><div class="list-item-title">Seguridad</div></div><i class="ti ti-chevron-right list-item-action" aria-hidden="true"></i></div>
+    </div>
+    <button class="btn btn-danger" style="margin-top:8px" onclick="loginAs('')"><i class="ti ti-logout" aria-hidden="true"></i> Cerrar sesión</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-check" aria-hidden="true"></i><span id="toast-msg">Acción completada</span></div>
+</div>
+
+<script>
+var currentScreen='screen-login';
+var screenHistory=[];
+var currentStep=1;
+var photoCount=0;
+var isSigned=false;
+var isRecording=false;
+var currentRole='';
+
+function showScreen(id){
+  if(currentScreen&&currentScreen!==id)screenHistory.push(currentScreen);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  var s=document.getElementById(id);
+  if(s){s.classList.add('active');currentScreen=id;}
+  if(id==='screen-nueva-muestra'){currentStep=1;renderStep(1);}
+}
+function goBack(){
+  if(screenHistory.length>0){
+    var prev=screenHistory.pop();
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    var s=document.getElementById(prev);
+    if(s){s.classList.add('active');currentScreen=prev;}
+  }
+}
+function loginAs(role){
+  currentRole=role;
+  screenHistory=[];
+  if(role==='tecnico')showScreen('screen-home-tecnico');
+  else if(role==='admin')showScreen('screen-home-admin');
+  else if(role==='cliente')showScreen('screen-home-cliente');
+  else showScreen('screen-login');
+}
+function doLogin(){
+  var e=document.getElementById('login-email').value;
+  if(e.includes('admin'))loginAs('admin');
+  else if(e.includes('cliente'))loginAs('cliente');
+  else loginAs('tecnico');
+}
+function renderStep(n){
+  document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
+  var el=document.getElementById('step'+n);
+  if(el)el.classList.add('active');
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i+1<n)d.classList.add('done');
+    else if(i+1===n)d.classList.add('active');
+  });
+  var lbl=document.getElementById('step-label');
+  if(lbl)lbl.textContent='Paso '+n+'/4';
+  currentStep=n;
+}
+function nextStep(n){
+  if(n>=1&&n<=4)renderStep(n);
+}
+function addPhoto(el){
+  if(!el.classList.contains('filled')){
+    el.classList.add('filled');
+    el.innerHTML='<i class="ti ti-check" style="color:#5dcaa5;font-size:20px" aria-hidden="true"></i>';
+    photoCount++;
+    var r=document.getElementById('photo-count-review');
+    if(r)r.textContent=photoCount+' adjuntas';
+    showToast('Foto añadida ('+photoCount+'/6)','success');
+  }
+}
+function toggleSign(){
+  isSigned=!isSigned;
+  var box=document.getElementById('sig-box');
+  var txt=document.getElementById('sig-text');
+  var rev=document.getElementById('sign-status-review');
+  if(isSigned){
+    box.classList.add('signed');
+    txt.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> Firmado digitalmente';
+    if(rev)rev.textContent='Firmado';
+    showToast('Firma capturada','success');
+  } else {
+    box.classList.remove('signed');
+    txt.innerHTML='<i class="ti ti-pencil" aria-hidden="true"></i> Toca para firmar';
+    if(rev)rev.textContent='Pendiente';
+  }
+}
+function toggleMic(){
+  isRecording=!isRecording;
+  var btn=document.getElementById('mic-btn');
+  var st=document.getElementById('mic-status');
+  if(isRecording){
+    btn.classList.add('recording');
+    st.textContent='Grabando...';
+    setTimeout(function(){
+      if(isRecording){
+        isRecording=false;
+        btn.classList.remove('recording');
+        st.textContent='Transcripción lista';
+        var ta=document.getElementById('obs-text');
+        if(ta)ta.value+=' Temperatura verificada en cámara N°3.';
+        showToast('Transcripción completada','success');
+      }
+    },2500);
+  } else {
+    btn.classList.remove('recording');
+    st.textContent='Toca para dictar';
+  }
+}
+function refreshGPS(){
+  var c=document.getElementById('gps-coords');
+  var p=document.getElementById('gps-prec');
+  if(c){c.textContent='Actualizando...';}
+  setTimeout(function(){
+    if(c)c.textContent='4.6102° N, 74.0821° W';
+    if(p)p.textContent='Precisión: 5 m · Bogotá, Colombia';
+    showToast('GPS actualizado','success');
+  },1200);
+}
+function checkTemp(v){
+  var a=document.getElementById('temp-alert');
+  if(!a)return;
+  var num=parseFloat(v);
+  if(!isNaN(num)&&(num>8||num<-2)){a.style.display='flex';}
+  else{a.style.display='none';}
+}
+function submitMuestra(){
+  showToast('Muestra guardada y reporte enviado','success');
+  setTimeout(function(){
+    screenHistory=[];
+    if(currentRole==='tecnico')showScreen('screen-home-tecnico');
+    else showScreen('screen-home-tecnico');
+  },1500);
+}
+function switchTab(el,tabId){
+  var parent=el.parentElement;
+  parent.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  var container=parent.parentElement;
+  var allTabs=container.querySelectorAll('[id^="tab-"],[id^="admin-"]');
+  allTabs.forEach(t=>{t.style.display='none';});
+  var target=document.getElementById(tabId);
+  if(target)target.style.display='block';
+}
+function toggleTag(el){
+  el.classList.toggle('selected');
+}
+function toggleFiltros(){
+  var p=document.getElementById('filtros-panel');
+  if(p)p.style.display=p.style.display==='none'?'block':'none';
+}
+var toastTimer=null;
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  var m=document.getElementById('toast-msg');
+  if(!t||!m)return;
+  m.textContent=msg||'Acción completada';
+  t.className='toast show'+(type==='warn'?' toast-warn':'');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},2500);
+}
+</script>
